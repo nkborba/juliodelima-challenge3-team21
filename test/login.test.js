@@ -1,7 +1,6 @@
 const request = require('supertest');
 const app = require('../src/app');
 const { resetFailedAttempts } = require('../src/users');
-const should = require('should');
 
 describe('Login API', function () {
   beforeEach(() => {
@@ -24,31 +23,44 @@ describe('Login API', function () {
     res.body.message.should.equal('Invalid credentials. You have 2 attempts left');
   });
 
-  it('should correct warning for 2 attempts left', async function () {
+
+  it('should correct warning for 1 attempts left', async function () {
     const user = {
-      username: 'testUser',
+      username: 'test2',
       password: 'password123',
-      email: 'testuser@example.com',
-      failedAttempts: 1,
-      blocked: false,
     }
     const res = await request(app)
       .post('/api/login')
-      .send({ username: "alice", password: "wrongpass" });
+      .send({ username: user.username, password: user.password });
     res.status.should.equal(401);
-    console.log(res.body);
+    res.body.message.should.equal('Invalid credentials. You have 1 attempts left');
+  });
+
+  it('should correct warning for 2 attempts left', async function () {
+    const user = {
+      username: 'test1',
+      password: 'password123',
+    }
+    const res = await request(app)
+      .post('/api/login')
+      .send({ username: user.username, password: user.password });
+    res.status.should.equal(401);
     res.body.message.should.equal('Invalid credentials. You have 2 attempts left');
   });
 
   it('should block after 3 failed attempts', async function () {
+    const user = {
+      username: 'alice',
+      password: 'wrongpass'
+    }
     for (let i = 0; i < 2; i++) {
       await request(app)
         .post('/api/login')
-        .send({ username: 'alice', password: 'wrongpass' });
+        .send({ username: user.username, password:  user.password });
     }
     const res = await request(app)
       .post('/api/login')
-      .send({ username: 'alice', password: 'wrongpass' });
+      .send({ username: user.username, password: user.password });
     res.status.should.equal(401);
     res.body.message.should.equal('Account blocked after 3 failed attempts');
   });
