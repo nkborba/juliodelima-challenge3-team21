@@ -13,6 +13,20 @@ const users = [
     failedAttempts: 0,
     blocked: false,
   },
+   {
+    username: 'test1',
+    password: 'securepass',
+    email: 'bob@example.com',
+    failedAttempts: 0,
+    blocked: false,
+  },
+   {
+    username: 'test2',
+    password: 'securepass',
+    email: 'bob@example.com',
+    failedAttempts: 1,
+    blocked: false,
+  },
 ];
 
 function getUser(username) {
