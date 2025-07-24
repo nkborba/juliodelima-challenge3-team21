@@ -1,6 +1,6 @@
 # Team members
 [@nkborba](https://github.com/nkborba)
-
+[@wgomes95](https://github.com/wgomes95)
 
 # E-commerce Login Management API
 
