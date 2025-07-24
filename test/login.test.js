@@ -1,16 +1,27 @@
 const request = require('supertest');
 const app = require('../src/app');
-const { resetFailedAttempts } = require('../src/users');
+const { resetFailedAttempts, updateUser } = require('../src/users');
+const should = require('should');
+const { addUser, removeUser } = require('../src/users');
 
-describe('Login API', function () {
+describe('Login endpoint', function () {
   beforeEach(() => {
     resetFailedAttempts('alice');
   });
 
+  before(function () {
+    defaultUser = {
+      username: 'alice',
+      rightPassword: 'password123',
+      wrongPass: 'wrongpass',
+      email: 'alice@example.com'
+    }
+  })
+
   it('should login successfully with correct credentials', async function () {
     const res = await request(app)
       .post('/api/login')
-      .send({ username: 'alice', password: 'password123' });
+      .send({ username: defaultUser.username, password: defaultUser.rightPassword });
     res.status.should.equal(200);
     res.body.message.should.equal('Login successful');
   });
@@ -18,50 +29,40 @@ describe('Login API', function () {
   it('should fail with invalid credentials', async function () {
     const res = await request(app)
       .post('/api/login')
-      .send({ username: 'alice', password: 'wrongpass' });
+      .send({ username: defaultUser.username, password: defaultUser.wrongPass });
     res.status.should.equal(401);
     res.body.message.should.equal('Invalid credentials. You have 2 attempts left');
   });
 
-
-  it('should correct warning for 1 attempts left', async function () {
-    const user = {
-      username: 'test2',
-      password: 'password123',
-    }
+  it('should display a warning message for 1 attempt left', async function () {
+    const testUser = {
+      username: 'test1',
+      password: 'securepass',
+      email: 'bob@example.com',
+      failedAttempts: 1,
+      blocked: false,
+    };
+    addUser(testUser);
     const res = await request(app)
       .post('/api/login')
-      .send({ username: user.username, password: user.password });
+      .send({ username: testUser.username, password: 'wrongpass' });
     res.status.should.equal(401);
     res.body.message.should.equal('Invalid credentials. You have 1 attempts left');
-  });
-
-  it('should correct warning for 2 attempts left', async function () {
-    const user = {
-      username: 'test1',
-      password: 'password123',
-    }
-    const res = await request(app)
-      .post('/api/login')
-      .send({ username: user.username, password: user.password });
-    res.status.should.equal(401);
-    res.body.message.should.equal('Invalid credentials. You have 2 attempts left');
+    removeUser('testUser');
   });
 
   it('should block after 3 failed attempts', async function () {
-    const user = {
-      username: 'alice',
-      password: 'wrongpass'
-    }
-    for (let i = 0; i < 2; i++) {
-      await request(app)
+
+    let res
+
+    for (let i = 0; i < 3; i++) {
+      res = await request(app)
         .post('/api/login')
-        .send({ username: user.username, password:  user.password });
+        .send({ username: defaultUser.username, password: defaultUser.wrongPass });
     }
-    const res = await request(app)
-      .post('/api/login')
-      .send({ username: user.username, password: user.password });
+
     res.status.should.equal(401);
     res.body.message.should.equal('Account blocked after 3 failed attempts');
   });
+
 });

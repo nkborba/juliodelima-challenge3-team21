@@ -5,28 +5,7 @@ const users = [
     email: 'alice@example.com',
     failedAttempts: 0,
     blocked: false,
-  },
-  {
-    username: 'bob',
-    password: 'securepass',
-    email: 'bob@example.com',
-    failedAttempts: 0,
-    blocked: false,
-  },
-   {
-    username: 'test1',
-    password: 'securepass',
-    email: 'bob@example.com',
-    failedAttempts: 0,
-    blocked: false,
-  },
-   {
-    username: 'test2',
-    password: 'securepass',
-    email: 'bob@example.com',
-    failedAttempts: 1,
-    blocked: false,
-  },
+  }
 ];
 
 function getUser(username) {
@@ -44,4 +23,13 @@ function resetFailedAttempts(username) {
   updateUser(username, { failedAttempts: 0, blocked: false });
 }
 
-module.exports = { users, getUser, updateUser, resetFailedAttempts };
+function addUser(user) {
+  users.push(user);
+}
+
+function removeUser(username) {
+  const idx = users.findIndex(u => u.username === username);
+  if (idx !== -1) users.splice(idx, 1);
+}
+
+module.exports = { users, getUser, updateUser, resetFailedAttempts, addUser, removeUser };

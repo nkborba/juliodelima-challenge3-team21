@@ -3,19 +3,21 @@ const app = require('../src/app');
 const should = require('should');
 
 describe('Password Recovery API', function () {
-  it('should send recovery instructions if user exists', async function () {
-    const user = {
+
+  before(function () {
+    defaultUser = {
       username: 'alice',
-      email: 'alice@example.com',
-       };
-    await request(app)
-      .post('/api/register')
-      .send(user);
+      email: 'alice@example.com'
+    }
+  })
+
+  it('should send recovery instructions if user exists', async function () {
+
     const res = await request(app)
       .post('/api/recover')
-      .send({ username: 'alice' });
+      .send({ username: defaultUser.username });
     res.status.should.equal(200);
-    res.body.message.should.equal(`Password recovery instructions sent to ${user.email}`);
+    res.body.message.should.equal(`Password recovery instructions sent to ${defaultUser.email}`);
   });
 
   it('should return 404 if user does not exist', async function () {
