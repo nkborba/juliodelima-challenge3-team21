@@ -1,3 +1,7 @@
+# Team members
+[@nkborba](https://github.com/nkborba)
+
+
 # E-commerce Login Management API
 
 This project is a REST API for login management, blocking after failed attempts, and password recovery for an e-commerce platform. It is designed for software testing studies and uses in-memory storage (no database).
