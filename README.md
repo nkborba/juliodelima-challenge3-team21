@@ -1,6 +1,9 @@
 # Team members
-[@nkborba](https://github.com/nkborba)
-[@wgomes95](https://github.com/wgomes95)
+| [@nkborba](https://github.com/nkborba) |
+[@wgomes95](https://github.com/wgomes95) |
+[@fsreibnitz](https://github.com/fsreibnitz) |
+[@vanessalaves](https://www.linkedin.com/in/vandev) |
+[@renatoalves](https://www.linkedin.com/in/renato-oliveira-alves44/) |
 
 # E-commerce Login Management API
 
