@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+    <div class="header-title">
+        <h1>Group 21</h1>
+        <p>Challenge #3</p>
+    </div>
+    
+    <div class="container">
+        <!-- Login Form -->
+        <div id="loginForm" class="form-container">
+            <div class="logo">
+                <h1>Welcome</h1>
+            </div>
+            
+            <div id="message" class="message hidden"></div>
+            
+            <form id="loginFormElement">
+                <div class="form-group">
+                    <label for="username">Username or Email</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="login-btn" id="loginBtn">
+                    Sign In
+                </button>
+            </form>
+            
+            <div class="forgot-password">
+                <a href="#" id="forgotPasswordLink">Forgot your password?</a>
+            </div>
+        </div>
+
+        <!-- Password Recovery Form -->
+        <div id="recoveryForm" class="form-container hidden">
+            <div class="logo">
+                <h1>Reset Password</h1>
+            </div>
+            
+            <div id="recoveryMessage" class="message hidden"></div>
+            
+            <form id="recoveryFormElement">
+                <div class="form-group">
+                    <label for="recoveryEmail">Email Address</label>
+                    <input type="email" id="recoveryEmail" name="email" required>
+                </div>
+                
+                <button type="submit" class="login-btn" id="recoveryBtn">
+                    Send Recovery Email
+                </button>
+                
+                <button type="button" class="back-btn" id="backToLogin">
+                    Back to Login
+                </button>
+            </form>
+        </div>
+
+        <!-- Dashboard (shown after successful login) -->
+        <div id="dashboard" class="form-container hidden">
+            <div class="logo">
+                <h1>Dashboard</h1>
+            </div>
+            
+            <div class="message success">
+                Welcome back! You have successfully logged in.
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3 style="color: #333; margin-bottom: 10px;">User Information</h3>
+                    <p style="color: #666;"><strong>Username:</strong> <span id="dashboardUsername"></span></p>
+                    <p style="color: #666;"><strong>Login Time:</strong> <span id="loginTime"></span></p>
+                    <p style="color: #666;"><strong>Status:</strong> Active</p>
+                </div>
+                
+                <button type="button" class="login-btn" id="logoutBtn" style="max-width: 200px; margin: 0 auto;">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
