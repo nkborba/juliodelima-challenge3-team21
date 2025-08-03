@@ -20,6 +20,7 @@ This project is a REST API for login management, blocking after failed attempts,
 ## Getting Started
 
 ### Install dependencies
+On api folder
 ```
 npm install
 ```
@@ -30,13 +31,37 @@ npm start
 ```
 The server will start on [http://localhost:3000](http://localhost:3000).
 
+### Run the Frontend
+On frontend folder
+```
+npx serve -l 3001
+```
+Confirm the installation if necessary
+
+```Need to install the following packages:
+serve@14.2.4
+Ok to proceed? (y) y```
+
+Access the browser [http://localhost:3001](http://localhost:3001)
+
 ### API Documentation
 Swagger docs are available at:
 ```
 http://localhost:3000/api-docs
 ```
 
-### Run Tests
+### Install Cypress
+On main folder
+```
+npm install
+```
+
+### Run E2E Tests with Cypress
+```
+npx cypress open
+```
+
+### Run APT Tests
 ```
 npm test
 ```
