@@ -74,12 +74,12 @@ describe('UI Test with API validation', () => {
 });
 
 describe('API Test without UI', () => {
-  const apiUrl = 'http://localhost:3000/api/login';
+  const apiBaseUrl = 'http://localhost:3000';
 
   it('should login with valid credentials', () => {
     cy.request({
       method: 'POST',
-      url: apiUrl,
+      url: `${apiBaseUrl}/api/login`,
       body: {
         username: 'alice',
         password: 'password123',
@@ -87,6 +87,68 @@ describe('API Test without UI', () => {
     }).then((response) => {
       expect(response.status).to.eq(200);
       expect(response.body.message).eq('Login successful');
+    });
+  });
+  it('should return 401 for invalid credentials', () => {
+    const errorMsg = 'Invalid credentials';
+    cy.request({
+      method: 'POST',
+      url: `${apiBaseUrl}/api/login`,
+      body: {
+        username: 'notexistentuser',
+        password: 'wrongpassword',
+      },
+      failOnStatusCode: false,
+    }).then((response) => {
+      expect(response.status).to.eq(401);
+      expect(response.body.message).eq(errorMsg);
+    });
+  });
+  it('should block account after 3 failed attempts', () => {
+    const errorMsg = 'Account blocked after 3 failed attempts';
+    Cypress._.times(4, (times) => {
+      cy.request({
+      method: 'POST',
+      url: `${apiBaseUrl}/api/login`,
+      body: {
+        username: 'alice',
+        password: 'wrongpassword',
+        
+      },
+      failOnStatusCode: false,
+    }).then((response) => {
+      if (times === 3) {
+        expect(response.status).to.eq(401);
+        expect(response.body.message).eq(errorMsg);
+      };
+    });
+    });
+  });
+  it('should send password recovery email', () => {
+   const userEmail = 'alice@example.com';
+    cy.request({
+      method: 'POST',
+      url: `${apiBaseUrl}/api/recover`,
+      body: {
+        email: userEmail,
+      },
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.body.message).eq(`Password recovery instructions sent to ${userEmail}`);
+    });
+  });
+    it('should display user not found message when email does not exist', () => {
+    const userEmail = 'notexistentuser@example.com';
+    cy.request({
+      method: 'POST',
+      url: `${apiBaseUrl}/api/recover`,
+      body: {
+        email: userEmail,
+      },
+      failOnStatusCode: false,
+    }).then((response) => {
+      expect(response.status).to.eq(404);
+      expect(response.body.message).eq('User not found');
     });
   });
 });
