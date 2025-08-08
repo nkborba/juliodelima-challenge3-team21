@@ -40,8 +40,8 @@ Confirm the installation if necessary
 
 ```Need to install the following packages:
 serve@14.2.4
-Ok to proceed? (y) y```
-
+Ok to proceed? (y) y
+```
 Access the browser [http://localhost:3001](http://localhost:3001)
 
 ### API Documentation
