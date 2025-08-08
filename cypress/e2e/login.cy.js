@@ -55,16 +55,20 @@ describe('UI Test with API validation', () => {
   })
   it('should send password recovery email', () => {
     cy.visit('login_page.html');
+    cy.intercept('POST', 'api/recover').as('recover');
     cy.get('#forgotPasswordLink').click();
     cy.get('#recoveryEmail').type("alice@example.com");
     cy.get('#recoveryBtn').click();
+    cy.wait('@recover').then(({ response }) => { expect(response.statusCode).to.eq(200); });
     cy.get('#recoveryMessage').should('have.text', 'Recovery email sent! Account has been unblocked.');
   });
   it('should display user not found message when email does not exist', () => {
     cy.visit('login_page.html');
+    cy.intercept('POST', 'api/recover').as('recover');
     cy.get('#forgotPasswordLink').click();
     cy.get('#recoveryEmail').type("notexistentuser@example.com");
     cy.get('#recoveryBtn').click();
+    cy.wait('@recover').then(({ response }) => { expect(response.statusCode).to.eq(404); });
     cy.get('#recoveryMessage').should('have.text', 'User not found');
   });
 });
